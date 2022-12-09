@@ -50,9 +50,10 @@ extern "C" {
 /* USER CODE END EM */
 
 /* Exported functions prototypes ---------------------------------------------*/
-
+#ifdef __cplusplus
 bool HAL_ReceiveUART(uint8_t* pData);
 bool HAL_TransferUART(uint8_t nData);
+#endif
 /* USER CODE BEGIN EFP */
 /* USER CODE END EFP */
 
