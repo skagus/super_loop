@@ -12,24 +12,27 @@
 
 uint32_t CON_GetLine(uint8_t* pLine)
 {
-	uint32_t nLen = 0;
+	static uint32_t nLen = 0;
 	uint8_t* pBuf = pLine;
 	uint8_t nData;
-	while(true)
+//	while(true)
 	{
 		if(true == HAL_ReceiveUART(&nData))
 		{
 			if(nData == NEW_LINE)
 			{
 				*pBuf = 0;	// String End.
-				break;
+				uint32_t nRet = nLen;
+				nLen = 0;
+				return nRet;
+//				break;
 			}
 			*pBuf = nData;
 			pBuf++;
 			nLen++;
 		}
 	}
-	return nLen;
+	return 0; nLen;
 }
 
 void CON_Puts(uint8_t* pLine)
