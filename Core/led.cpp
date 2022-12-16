@@ -9,24 +9,30 @@
 #include "console.h"
 #include "led.h"
 
-#define LED_PIN	(1 << 11)
+#define LED_PIN			(1 << 11)
+#define BLINK_PRIOD		(100)
 
+static uint32_t gnPrvTick;
+static bool gbOn;
+static bool gbBlink;
 
 void LED_Run()
 {
-	static uint32_t nPrvTick = HAL_GetTick();
-	static bool bOn = false;
-	uint32_t nCurTick = HAL_GetTick();
-	if(nCurTick - nPrvTick >= 1000)
+	if(gbBlink)
 	{
-		HAL_OutPort(LED_PIN, bOn);
-		bOn = !bOn;
-		nPrvTick = nCurTick;
+		uint32_t nCurTick = HAL_GetTick();
+		if(nCurTick - gnPrvTick >= BLINK_PRIOD)
+		{
+			HAL_OutPort(LED_PIN, gbOn);
+			gbOn = !gbOn;
+			gnPrvTick = nCurTick;
+		}
 	}
 }
 
 void LED_SetOp(LedOp eOp)
 {
+	gbBlink = false;
 	switch(eOp)
 	{
 		case LED_OFF:
@@ -43,7 +49,8 @@ void LED_SetOp(LedOp eOp)
 		}
 		case LED_BLINK:
 		{
-			//???
+			CON_Puts((uint8_t*)"led blink\n");
+			gbBlink = true;
 			break;
 		}
 		default:
@@ -59,22 +66,5 @@ void LED_SetOp(LedOp eOp)
 void LED_Cli(uint32_t argc, uint8_t* argv[])
 {
 	uint32_t nOp = atoi((char*)argv[1]);
-	switch(nOp)
-	{
-		case 0:
-		{
-			LED_SetOp(LED_OFF);
-			break;
-		}
-		case 1:
-		{
-			LED_SetOp(LED_ON);
-			break;
-		}
-		default:
-		{
-			CON_Puts((uint8_t*)"Not supported LED OP\n");
-			break;
-		}
-	}
+	LED_SetOp((LedOp)nOp);
 }

@@ -32,12 +32,15 @@ uint32_t getToken(uint8_t* pInput, uint8_t* argv[])
 #define MAX_TOKEN	(8)
 
 uint8_t anLongBuf[SIZE_BUF];
+uint32_t gnLen;
+
 uint8_t* argv[MAX_TOKEN];
 
 void CLI_Run()
 {
-	if(CON_GetLine(anLongBuf))
+	if(CON_GetLineNB(anLongBuf, &gnLen))
 	{
+		gnLen = 0;
 		uint32_t argc = getToken(anLongBuf, argv);
 		if(0 == argc)
 		{

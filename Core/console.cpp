@@ -10,29 +10,27 @@
 
 #define NEW_LINE		(0x0d)
 
+
 uint32_t CON_GetLine(uint8_t* pLine)
 {
-	static uint32_t nLen = 0;
+	uint32_t nLen = 0;
 	uint8_t* pBuf = pLine;
 	uint8_t nData;
-//	while(true)
+	while(true)
 	{
 		if(true == HAL_ReceiveUART(&nData))
 		{
 			if(nData == NEW_LINE)
 			{
 				*pBuf = 0;	// String End.
-				uint32_t nRet = nLen;
-				nLen = 0;
-				return nRet;
-//				break;
+				break;
 			}
 			*pBuf = nData;
 			pBuf++;
 			nLen++;
 		}
 	}
-	return 0; nLen;
+	return nLen;
 }
 
 void CON_Puts(uint8_t* pLine)
@@ -47,14 +45,27 @@ void CON_Puts(uint8_t* pLine)
 	}
 }
 
+
 void CON_PutsNB()
 {
 
 }
 
-bool CON_GetLineNB(uint8_t* pLine)
-{
 
+bool CON_GetLineNB(uint8_t* pBuf, uint32_t* pnLen)
+{
+	uint8_t nData;
+	if(true == HAL_ReceiveUART(&nData))
+	{
+		if(nData == NEW_LINE)
+		{
+			pBuf[*pnLen] = 0;	// String End.
+			return true;
+		}
+		pBuf[*pnLen] = nData;
+		(*pnLen)++;
+	}
+	return false;
 }
 
 void CON_Run()
