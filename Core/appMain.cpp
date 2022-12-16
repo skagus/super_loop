@@ -18,7 +18,7 @@ void appMain()
 	// Init : 생략.
 
 	CON_Puts((uint8_t*)"Start\n");
-	uint32_t nTick = HAL_GetTick();
+
 	while(true)
 	{
 		CLI_Run();

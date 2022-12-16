@@ -14,7 +14,15 @@
 
 void LED_Run()
 {
-
+	static uint32_t nPrvTick = HAL_GetTick();
+	static bool bOn = false;
+	uint32_t nCurTick = HAL_GetTick();
+	if(nCurTick - nPrvTick >= 1000)
+	{
+		HAL_OutPort(LED_PIN, bOn);
+		bOn = !bOn;
+		nPrvTick = nCurTick;
+	}
 }
 
 void LED_SetOp(LedOp eOp)
