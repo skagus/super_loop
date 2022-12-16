@@ -8,49 +8,10 @@
 #include <string.h>
 #include <stdlib.h>
 #include "main.h"
+#include "console.h"
 #include "appMain.h"
+#include "led.h"
 
-#define NEW_LINE		(0x0d)
-
-uint32_t getLine(uint8_t* pLine)
-{
-	uint32_t nLen = 0;
-	uint8_t* pBuf = pLine;
-	uint8_t nData;
-	while(true)
-	{
-		if(true == HAL_ReceiveUART(&nData))
-		{
-			if(nData == NEW_LINE)
-			{
-				*pBuf = 0;	// String End.
-				break;
-			}
-			*pBuf = nData;
-			pBuf++;
-			nLen++;
-		}
-	}
-	return nLen;
-}
-
-
-
-#define LED_PIN	(1 << 11)
-
-void cmdLed(uint32_t argc, uint8_t* argv[])
-{
-	if(0 == atoi((char*)argv[1]))
-	{
-		putLine((uint8_t*)"led off\n");
-		HAL_OutPort(LED_PIN, true);
-	}
-	else
-	{
-		putLine((uint8_t*)"led on\n");
-		HAL_OutPort(LED_PIN, false);
-	}
-}
 
 uint32_t getToken(uint8_t* pInput, uint8_t* argv[])
 {
@@ -75,24 +36,26 @@ uint8_t* argv[MAX_TOKEN];
 
 void CLI_Run()
 {
-	getLine(anLongBuf);
-	uint32_t argc = getToken(anLongBuf, argv);
-	if(0 == argc)
+	if(CON_GetLine(anLongBuf))
 	{
-		putLine((uint8_t*)"\n");
-		return;
-	}
-	if(strncmp((char*)argv[0], "led", strlen("led")) == 0)
-	{
-		cmdLed(argc, argv);
-	}
-	else if(argc > 0)
-	{
-		putLine((uint8_t*)"Not supported\n");
-		for(uint32_t nCnt = 0; nCnt < argc; nCnt++)
+		uint32_t argc = getToken(anLongBuf, argv);
+		if(0 == argc)
 		{
-			putLine(argv[nCnt]);
-			putLine((uint8_t*)"\n");
+			CON_Puts((uint8_t*)"\n");
+			return;
+		}
+		if(strncmp((char*)argv[0], "led", strlen("led")) == 0)
+		{
+			LED_Cli(argc, argv);
+		}
+		else if(argc > 0)
+		{
+			CON_Puts((uint8_t*)"Not supported\n");
+			for(uint32_t nCnt = 0; nCnt < argc; nCnt++)
+			{
+				CON_Puts(argv[nCnt]);
+				CON_Puts((uint8_t*)"\n");
+			}
 		}
 	}
 }

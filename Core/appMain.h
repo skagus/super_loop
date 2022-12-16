@@ -9,6 +9,4 @@
 #define APPMAIN_H_
 
 
-void putLine(uint8_t* pLine);
-
 #endif /* APPMAIN_H_ */
