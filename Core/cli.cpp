@@ -31,16 +31,34 @@ uint32_t getToken(uint8_t* pInput, uint8_t* argv[])
 #define SIZE_BUF	(80)
 #define MAX_TOKEN	(8)
 
+enum State
+{
+	INIT,
+	WAIT_LINE,
+	LINE_READY,
+};
 uint8_t anLongBuf[SIZE_BUF];
-uint32_t gnLen;
-
 uint8_t* argv[MAX_TOKEN];
+State geState;
+
+void cli_Callback(uint8_t* pLine, uint32_t nLen)
+{
+	geState = LINE_READY;
+}
+
 
 void CLI_Run()
 {
-	if(CON_GetLineNB(anLongBuf, &gnLen))
+	if(geState == INIT)
 	{
-		gnLen = 0;
+		if(true == CON_ReqGetLine(anLongBuf, cli_Callback))
+		{
+			geState = WAIT_LINE;
+		}
+	}
+	else if(geState == LINE_READY)
+	{
+		geState = INIT;
 		uint32_t argc = getToken(anLongBuf, argv);
 		if(0 == argc)
 		{

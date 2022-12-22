@@ -23,5 +23,6 @@ void appMain()
 	{
 		CLI_Run();
 		LED_Run();
+		CON_Run();
 	}
 }
