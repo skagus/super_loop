@@ -8,5 +8,12 @@
 #ifndef APPMAIN_H_
 #define APPMAIN_H_
 
+#ifdef __cplusplus
+extern "C" {
+	void appMain();
+}
+#else
+void appMain();
+#endif
 
 #endif /* APPMAIN_H_ */

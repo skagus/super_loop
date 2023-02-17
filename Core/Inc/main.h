@@ -54,9 +54,9 @@ void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
 #ifdef __cplusplus
-bool HAL_ReceiveUART(uint8_t* pData);
-bool HAL_TransferUART(uint8_t nData);
-void HAL_OutPort(uint32_t bmBit, bool bSet);
+uint32_t HAL_ReceiveUART(uint8_t* pData);
+uint32_t HAL_TransferUART(uint8_t nData);
+void HAL_OutPort(uint32_t bmBit, uint32_t bSet);
 #endif
 /* USER CODE END EFP */
 

@@ -84,6 +84,7 @@ bool CON_ReqGetLine(uint8_t* pLine, ConCbf pfDone)
 	gpRxLine = pLine;
 	gbRun = true;
 	gnLen = 0;
+	return true;
 }
 
 void CON_Run()

@@ -17,6 +17,7 @@
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
+#include "../appMain.h"
 #include "main.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -51,7 +52,7 @@ static void MX_GPIO_Init(void);
 static void MX_USART1_UART_Init(void);
 /* USER CODE BEGIN PFP */
 void Error_Handler(void);
-void appMain();
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -199,17 +200,17 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-bool HAL_ReceiveUART(uint8_t* pData)
+uint32_t HAL_ReceiveUART(uint8_t* pData)
 {
 	return (HAL_OK == HAL_UART_Receive(&huart1, pData, 1, 0));
 }
 
-bool HAL_TransferUART(uint8_t nData)
+uint32_t HAL_TransferUART(uint8_t nData)
 {
 	return (HAL_OK == HAL_UART_Transmit(&huart1, &nData, 1, 100));
 }
 
-void HAL_OutPort(uint32_t bmBit, bool bSet)
+void HAL_OutPort(uint32_t bmBit, uint32_t bSet)
 {
 	if(bSet)
 	{
